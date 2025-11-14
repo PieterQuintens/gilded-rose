@@ -1,29 +1,10 @@
-import { Item, GildedRose } from '@/gilded-rose';
-
-const buildItem = (item?: Partial<Item>) =>
-  new Item(item?.name ?? 'foo', item?.sellIn ?? 25, item?.quality ?? 25);
-
-const buildSulfurasItem = (item?: Partial<Item>) =>
-  buildItem({ ...item, name: 'Sulfuras, Hand of Ragnaros' });
-
-const buildAgedBrieItem = (item?: Partial<Item>) =>
-  buildItem({ ...item, name: 'Aged Brie' });
-
-const buildBackStagePassItem = (item?: Partial<Item>) =>
-  buildItem({ ...item, name: 'Backstage passes to a TAFKAL80ETC concert' });
-
-const buildConjuredItem = (item?: Partial<Item>) =>
-  buildItem({ ...item, name: 'Conjured' });
-
-const runSimulation = (items: Item[], iterations: number = 1): Item[] => {
-  const gildedRose = new GildedRose(items);
-
-  for (let i = 0; i < iterations; i++) {
-    gildedRose.updateQuality();
-  }
-
-  return items;
-};
+import {
+  buildItem,
+  runSimulation,
+  buildAgedBrieItem,
+  buildSulfurasItem,
+  buildBackStagePassItem,
+} from './gilded-rose.helpers';
 
 describe('Gilded Rose Item', () => {
   it('Quality decreases as it aproaches the sell by date', () => {
