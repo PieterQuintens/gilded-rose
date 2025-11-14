@@ -4,6 +4,7 @@ import {
   buildAgedBrieItem,
   buildSulfurasItem,
   buildBackStagePassItem,
+  buildConjuredItem,
 } from './gilded-rose.helpers';
 
 describe('Gilded Rose Item', () => {
@@ -125,5 +126,23 @@ describe('Gilded Rose Item', () => {
     });
   });
 
-  it.todo('Conjured degrades in quality twice as fast as normal items');
+  it('Conjured degrades in quality twice as fast as normal items', () => {
+    const item = buildConjuredItem({ quality: 35 });
+
+    runSimulation([item], 5);
+
+    expect(item.quality).toBe(25);
+  });
+
+  it('Conjured degrades in quality twice as fast as normal items, sellIn below 0', () => {
+    const item = buildConjuredItem({ quality: 35, sellIn: 2 });
+
+    runSimulation([item], 2);
+    // Should -4
+    expect(item.quality).toBe(31);
+
+    runSimulation([item], 2);
+    // Should -8
+    expect(item.quality).toBe(23);
+  });
 });
