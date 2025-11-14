@@ -58,7 +58,7 @@ describe('Gilded Rose Item', () => {
 
   it('Quality never passes 50', () => {
     const item = buildAgedBrieItem({
-      quality: 50,
+      quality: 46,
     });
     runSimulation([item], 20);
 
