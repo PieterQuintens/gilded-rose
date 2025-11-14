@@ -10,6 +10,13 @@ export class Item {
   }
 }
 
+export enum SpecialCaseItemNames {
+  SULFURAS = 'Sulfuras, Hand of Ragnaros',
+  AGED_BRIE = 'Aged Brie',
+  BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert',
+  CONJURED = 'Conjured',
+}
+
 const MAX_QUALITY_LEVEL = 50;
 
 export class GildedRose {
@@ -37,17 +44,26 @@ export class GildedRose {
     item.sellIn -= decrease;
   }
 
+  updateBackstagePass(item: Item) {
+    if (this.itemIsExpired(item)) {
+      item.quality = 0;
+      return item;
+    }
+    const increaseAmount = item.sellIn > 10 ? 1 : item.sellIn > 5 ? 2 : 3;
+    item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount);
+  }
+
   updateItem(item: Item): Item {
     switch (item.name) {
-      case 'Sulfuras, Hand of Ragnaros':
+      case SpecialCaseItemNames.SULFURAS:
         return item;
-      case 'Aged Brie':
+      case SpecialCaseItemNames.AGED_BRIE:
         this.increaseItemQuality(item);
         break;
-      case 'Backstage passes to a TAFKAL80ETC concert':
+      case SpecialCaseItemNames.BACKSTAGE_PASSES:
         this.updateBackstagePass(item);
         break;
-      case 'Conjured':
+      case SpecialCaseItemNames.CONJURED:
         this.decreaseItemQuality(item, 2);
         break;
       default:
@@ -55,18 +71,6 @@ export class GildedRose {
     }
 
     this.decreaseItemSellIn(item);
-
-    return item;
-  }
-
-  updateBackstagePass(item: Item): Item {
-    if (item.sellIn <= 0) {
-      item.quality = 0;
-      return item;
-    }
-    const increaseAmount = item.sellIn > 10 ? 1 : item.sellIn > 5 ? 2 : 3;
-
-    this.increaseItemQuality(item, increaseAmount);
 
     return item;
   }
