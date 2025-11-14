@@ -10,6 +10,8 @@ export class Item {
   }
 }
 
+const MAX_QUALITY_LEVEL = 50;
+
 export class GildedRose {
   items: Array<Item>;
 
@@ -17,7 +19,64 @@ export class GildedRose {
     this.items = items;
   }
 
+  increaseItemQuality(item: Item, increase: number = 1) {
+    if (MAX_QUALITY_LEVEL - item.quality <= increase) {
+      item.quality = MAX_QUALITY_LEVEL;
+    } else {
+      item.quality += increase;
+    }
+    return item;
+  }
+
+  decreaseItemQuality(item: Item, decrease: number = 1) {
+    if (item.quality <= decrease) {
+      item.quality = 0;
+    } else if (item.sellIn <= 0) {
+      item.quality -= decrease * 2;
+    } else {
+      item.quality -= decrease;
+    }
+    return item;
+  }
+
+  decreaseItemSellIn(item: Item, decrease: number = 1) {
+    item.sellIn -= decrease;
+    return item;
+  }
+
   updateItem(item: Item): Item {
+    switch (item.name) {
+      case 'Sulfuras, Hand of Ragnaros':
+        return item;
+      case 'Aged Brie':
+        this.updateAgedBrie(item);
+        break;
+      case 'Backstage passes to a TAFKAL80ETC concert':
+        this.updateBackstagePass(item);
+        break;
+      case 'Conjured':
+        break;
+      default:
+        this.decreaseItemQuality(item);
+        this.decreaseItemSellIn(item);
+    }
+
+    return item;
+  }
+
+  updateAgedBrie(item: Item): Item {
+    this.increaseItemQuality(item);
+
+    return item;
+  }
+
+  updateBackstagePass(item: Item): Item {
+    //   case item.sellIn > 10 => -1:
+    //   case item.sellIn < 10 && > 5 => -2:
+    //   case item.sellIn < 5 && > 0 => -2:
+
+    ++item.quality;
+
     return item;
   }
 
