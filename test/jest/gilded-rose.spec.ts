@@ -1,7 +1,7 @@
 import { Item, GildedRose } from '@/gilded-rose';
 
 const buildItem = (item?: Partial<Item>) =>
-  new Item(item?.name ?? 'foo', item?.sellIn ?? 50, item?.quality ?? 50);
+  new Item(item?.name ?? 'foo', item?.sellIn ?? 25, item?.quality ?? 25);
 
 const buildSulfurasItem = (item?: Partial<Item>) =>
   buildItem({ ...item, name: 'Sulfuras, Hand of Ragnaros' });
@@ -84,14 +84,64 @@ describe('Gilded Rose Item', () => {
     expect(item.quality).toBe(50);
   });
 
+  it('Sulfuras never decreases in quality', () => {
+    const sulfurasItem = buildSulfurasItem();
+    const regularItem = buildItem();
+
+    const sulfurasBeforeSimulation = sulfurasItem.quality;
+    const regularItemBeforeSimulation = regularItem.quality;
+
+    runSimulation([sulfurasItem, regularItem], 10);
+
+    expect(sulfurasItem.quality).toBe(sulfurasBeforeSimulation);
+    expect(regularItem.quality).not.toBe(regularItemBeforeSimulation);
+  });
+
+  it("Sulfuras never has to be sold (sellIn date doesn't change)", () => {
+    const sulfuras = buildSulfurasItem();
+    const regular = buildItem();
+
+    const sulfurasSellInBefore = sulfuras.sellIn;
+    const regularSellInBefore = regular.sellIn;
+
+    runSimulation([sulfuras, regular], 10);
+
+    expect(sulfuras.sellIn).toBe(sulfurasSellInBefore);
+    expect(regular.sellIn).not.toBe(regularSellInBefore);
+  });
+
   describe('Backstage Passes increase in quality the older it gets', () => {
-    it.todo('By 1 when more then 10 days');
+    it('By 1 when more then 10 days', () => {
+      const item = buildBackStagePassItem({ sellIn: 20, quality: 10 });
 
-    it.todo('By 2 when between 10 and 5 days');
+      runSimulation([item], 10);
 
-    it.todo('By 3 when between 5 and 0 days');
+      expect(item.quality).toBe(20);
+    });
 
-    it.todo('Quality drops to 0 after concert');
+    it('By 2 when between 10 and 5 days', () => {
+      const item = buildBackStagePassItem({ sellIn: 10, quality: 10 });
+
+      runSimulation([item], 5);
+
+      expect(item.quality).toBe(20);
+    });
+
+    it('By 3 when between 5 and 0 days', () => {
+      const item = buildBackStagePassItem({ sellIn: 5, quality: 10 });
+
+      runSimulation([item], 5);
+
+      expect(item.quality).toBe(25);
+    });
+
+    it('Quality drops to 0 after concert', () => {
+      const item = buildBackStagePassItem({ sellIn: 5, quality: 10 });
+
+      runSimulation([item], 10);
+
+      expect(item.quality).toBe(0);
+    });
   });
 
   it.todo('Conjured degrades in quality twice as fast as normal items');
