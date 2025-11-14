@@ -1,5 +1,7 @@
 # Gilded Rose
 
+<!-- TODO: Finish readme -->
+
 This is the Gilded Rose kata in TypeScript.
 
 ## Getting started
@@ -12,24 +14,21 @@ npm install
 
 ## Run the unit tests from the Command-Line
 
-There are two unit test frameworks to choose from, Jest and Mocha.
+```sh
+npm run test
+```
+
+or
 
 ```sh
-npm run test:jest
+npm test
 ```
 
 To run all tests in watch mode
 
 ```sh
-npm run test:jest:watch
+npm run test:watch
 ```
-
-Mocha
-
-```sh
-npm run test:mocha
-```
-
 
 ## Run the TextTest fixture from the Command-Line
 
@@ -40,12 +39,12 @@ npx ts-node test/golden-master-text-test.ts
 ```
 
 Or with number of days as args:
+
 ```sh
 npx ts-node test/golden-master-text-test.ts 10
 ```
 
 You should make sure the command shown above works when you execute it in a terminal before trying to use TextTest (see below).
-
 
 ## Run the TextTest approval test that comes with this project
 
@@ -53,5 +52,3 @@ There are instructions in the [TextTest Readme](../texttests/README.md) for sett
 
     executable:${TEXTTEST_HOME}/python/texttest_fixture.py
     interpreter:python
-
-
