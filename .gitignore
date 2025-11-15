@@ -9,3 +9,8 @@ test/**/*.js.map
 coverage
 .nyc_output
 package-lock.json
+
+venv/
+
+jest.config.js
+jest.config.js.map

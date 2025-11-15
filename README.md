@@ -1,30 +1,42 @@
 # Gilded Rose
 
-<!-- TODO: Finish readme -->
+This is my refactoring of the Gilded Rose kata in TypeScript.
 
-This is the Gilded Rose kata in TypeScript.
+## Setup
 
-## Getting started
-
-Install dependencies
+Install dependencies. The instructions are written using npm as the package manager but you can use your preferred package manager.
 
 ```sh
 npm install
 ```
 
-## Run the unit tests from the Command-Line
+### Optional: Texttest setup
+
+The files for running the Texttest approval tests are also included in the project. [Jump to the texttest section](#optional-run-the-texttest-approval-test)
+
+## Compiling the project
+
+Compiling the project can be done by running this command:
 
 ```sh
-npm run test
+npm run compile
 ```
 
-or
+## Run the tests from the Command-Line
+
+Running the tests can be done using this command:
 
 ```sh
 npm test
 ```
 
-To run all tests in watch mode
+or
+
+```sh
+npm run test
+```
+
+To run all tests in watch mode, run this:
 
 ```sh
 npm run test:watch
@@ -32,23 +44,52 @@ npm run test:watch
 
 ## Run the TextTest fixture from the Command-Line
 
-_You may need to install `ts-node`_
+A simulation for a single day can be run using this command:
 
 ```sh
 npx ts-node test/golden-master-text-test.ts
 ```
 
-Or with number of days as args:
+or when compiled:
+
+```sh
+node test/golden-master-text-test.js
+```
+
+The amount of days can be provided as an argument:
 
 ```sh
 npx ts-node test/golden-master-text-test.ts 10
 ```
 
-You should make sure the command shown above works when you execute it in a terminal before trying to use TextTest (see below).
+or when compiled:
 
-## Run the TextTest approval test that comes with this project
+```sh
+node test/golden-master-text-test.js 10
+```
 
-There are instructions in the [TextTest Readme](../texttests/README.md) for setting up TextTest. You will need to specify the Python executable and interpreter in [config.gr](../texttests/config.gr). Uncomment these lines:
+## Optional: Run the TextTest approval test
 
-    executable:${TEXTTEST_HOME}/python/texttest_fixture.py
-    interpreter:python
+_requires python 3.6 or above_
+
+### Setup
+
+Follow the steps lined out in the [TextTest Readme](texttests/README.md) for setting up TextTest.
+
+You might need to specify the Python executable and interpreter in [config.gr](texttests/config.gr). 
+
+If `which python` renders an output and `python --version` returns a version higher then 3.6, nothing needs to change. If only `which python3` returns a result, Change the `interpreter:python` line in [config.gr](texttests/config.gr) to `interpreter:python3` and also change `python -m venv venv` in [start_texttest.sh](start_texttest.sh) to `python3 -m venv venv`
+
+### Run
+
+The texttest can be run using the `start_texttest.sh` script in the root directory.
+
+```sh
+./start_texttest.sh
+```
+
+Tip: when running into issues with the texttest tests, try removing the venv folder in the project root:
+
+```sh
+rm -rf venv
+```
