@@ -26,29 +26,29 @@ export class GildedRose {
     this.items = items;
   }
 
-  itemIsExpired(item: Item): boolean {
+  private itemIsExpired(item: Item): boolean {
     return item.sellIn <= 0;
   }
 
-  itemIsConjured(item: Item): boolean {
+  private itemIsConjured(item: Item): boolean {
     return item.name.startsWith(SpecialCaseItemNames.CONJURED);
   }
 
-  increaseItemQuality(item: Item, amount: number = 1) {
+  private increaseItemQuality(item: Item, amount: number = 1) {
     const inceaseAmount = this.itemIsExpired(item) ? amount * 2 : amount;
     item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + inceaseAmount);
   }
 
-  decreaseItemQuality(item: Item, amount: number = 1) {
+  private decreaseItemQuality(item: Item, amount: number = 1) {
     const decreaseAmount = this.itemIsExpired(item) ? amount * 2 : amount;
     item.quality = Math.max(0, item.quality - decreaseAmount);
   }
 
-  decreaseItemSellIn(item: Item, decrease: number = 1) {
+  private decreaseItemSellIn(item: Item, decrease: number = 1) {
     item.sellIn -= decrease;
   }
 
-  updateBackstagePass(item: Item) {
+  private updateBackstagePass(item: Item) {
     if (this.itemIsExpired(item)) {
       item.quality = 0;
       return item;
@@ -57,7 +57,7 @@ export class GildedRose {
     item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount);
   }
 
-  updateItem(item: Item): Item {
+  private updateItem(item: Item): Item {
     switch (item.name) {
       case SpecialCaseItemNames.SULFURAS:
         return item;
@@ -78,7 +78,6 @@ export class GildedRose {
   }
 
   updateQuality() {
-    // return this.updateQualityOld();
     return this.items.map((item) => this.updateItem(item));
   }
 }

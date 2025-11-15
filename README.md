@@ -42,6 +42,12 @@ To run all tests in watch mode, run this:
 npm run test:watch
 ```
 
+To update snapshots, run this:
+
+```sh
+npm test -- -u
+```
+
 ## Run the TextTest fixture from the Command-Line
 
 A simulation for a single day can be run using this command:
@@ -76,7 +82,7 @@ _requires python 3.6 or above_
 
 Follow the steps lined out in the [TextTest Readme](texttests/README.md) for setting up TextTest.
 
-You might need to specify the Python executable and interpreter in [config.gr](texttests/config.gr). 
+You might need to specify the Python executable and interpreter in [config.gr](texttests/config.gr).
 
 If `which python` renders an output and `python --version` returns a version higher then 3.6, nothing needs to change. If only `which python3` returns a result, Change the `interpreter:python` line in [config.gr](texttests/config.gr) to `interpreter:python3` and also change `python -m venv venv` in [start_texttest.sh](start_texttest.sh) to `python3 -m venv venv`
 
