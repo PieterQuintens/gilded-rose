@@ -1,13 +1,21 @@
 import { Item } from './gilded-rose';
+import {
+  MAX_QUALITY_LEVEL,
+  SpecialCaseItemNames,
+} from './gilded-rose.constants';
 
-const MAX_QUALITY_LEVEL = 50;
+const skipItemSellInUpdate: ReadonlySet<string> = new Set([
+  SpecialCaseItemNames.SULFURAS,
+]);
 
-export enum SpecialCaseItemNames {
-  SULFURAS = 'Sulfuras, Hand of Ragnaros',
-  AGED_BRIE = 'Aged Brie',
-  BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert',
-  CONJURED = 'Conjured',
-}
+const itemQualityUpdates: Record<string, (item: Item) => Item> = {
+  [SpecialCaseItemNames.SULFURAS]: (item: Item): Item => item,
+  [SpecialCaseItemNames.AGED_BRIE]: (item: Item): Item =>
+    increaseItemQuality(item),
+  [SpecialCaseItemNames.BACKSTAGE_PASSES]: (item: Item): Item =>
+    updateBackstagePass(item),
+};
+
 const itemIsExpired = (item: Item): boolean => {
   return item.sellIn <= 0;
 };
@@ -17,8 +25,8 @@ const itemIsConjured = (item: Item): boolean => {
 };
 
 const increaseItemQuality = (item: Item, amount: number = 1): Item => {
-  const inceaseAmount = itemIsExpired(item) ? amount * 2 : amount;
-  item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + inceaseAmount);
+  const increaseAmount = itemIsExpired(item) ? amount * 2 : amount;
+  item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount);
 
   return item;
 };
@@ -48,30 +56,25 @@ const updateBackstagePass = (item: Item): Item => {
   return item;
 };
 
-const noItemUpdates: ReadonlySet<string> = new Set([
-  SpecialCaseItemNames.SULFURAS.toString(),
-]);
+const defaultUpdateFunction = (item: Item): Item => {
+  const decreaseAmount = itemIsConjured(item) ? 2 : 1;
+  decreaseItemQuality(item, decreaseAmount);
 
-const customItemUpdates: Record<string, (item: Item) => Item> = {
-  [SpecialCaseItemNames.AGED_BRIE]: (item: Item): Item =>
-    increaseItemQuality(item),
-  [SpecialCaseItemNames.BACKSTAGE_PASSES]: (item: Item): Item =>
-    updateBackstagePass(item),
+  return item;
 };
 
 export const updateItem = (item: Item): Item => {
-  if (noItemUpdates.has(item.name)) return item;
-
-  const updateFunction = customItemUpdates[item.name];
+  const updateFunction = itemQualityUpdates[item.name];
 
   if (updateFunction) {
     updateFunction(item);
   } else {
-    const decreaseAmount = itemIsConjured(item) ? 2 : 1;
-    decreaseItemQuality(item, decreaseAmount);
+    defaultUpdateFunction(item);
   }
 
-  decreaseItemSellIn(item);
+  if (!skipItemSellInUpdate.has(item.name)) {
+    decreaseItemSellIn(item);
+  }
 
   return item;
 };

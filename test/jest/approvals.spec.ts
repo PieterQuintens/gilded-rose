@@ -1,5 +1,3 @@
-import { Item, GildedRose } from '@/gilded-rose';
-
 /**
  * This unit test uses [Jest Snapshot](https://goo.gl/fbAQLP).
  *

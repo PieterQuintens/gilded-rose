@@ -1,4 +1,5 @@
-import { Item, GildedRose, SpecialCaseItemNames } from '@/gilded-rose';
+import { Item, GildedRose } from '@/gilded-rose';
+import { SpecialCaseItemNames } from '@/gilded-rose.constants';
 
 export const buildItem = (item?: Partial<Item>) =>
   new Item(item?.name ?? 'foo', item?.sellIn ?? 25, item?.quality ?? 25);
