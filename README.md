@@ -78,6 +78,8 @@ node test/golden-master-text-test.js 10
 
 _requires python 3.6 or above_
 
+_Because of the update to the conjured items, this test will fail because of the 'Conjured Mana Cake'. This is expected._
+
 ### Setup
 
 Follow the steps lined out in the [TextTest Readme](texttests/README.md) for setting up TextTest.
