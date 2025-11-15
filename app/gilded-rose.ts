@@ -30,6 +30,10 @@ export class GildedRose {
     return item.sellIn <= 0;
   }
 
+  itemIsConjured(item: Item): boolean {
+    return item.name.startsWith(SpecialCaseItemNames.CONJURED);
+  }
+
   increaseItemQuality(item: Item, amount: number = 1) {
     const inceaseAmount = this.itemIsExpired(item) ? amount * 2 : amount;
     item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + inceaseAmount);
@@ -63,11 +67,9 @@ export class GildedRose {
       case SpecialCaseItemNames.BACKSTAGE_PASSES:
         this.updateBackstagePass(item);
         break;
-      case SpecialCaseItemNames.CONJURED:
-        this.decreaseItemQuality(item, 2);
-        break;
       default:
-        this.decreaseItemQuality(item);
+        const decreaseAmount = this.itemIsConjured(item) ? 2 : 1;
+        this.decreaseItemQuality(item, decreaseAmount);
     }
 
     this.decreaseItemSellIn(item);

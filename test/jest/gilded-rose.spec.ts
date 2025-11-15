@@ -126,7 +126,7 @@ describe('Gilded Rose Item', () => {
     });
   });
 
-  it('Conjured degrades in quality twice as fast as normal items', () => {
+  it('Conjured item degrades in quality twice as fast as normal items', () => {
     const item = buildConjuredItem({ quality: 35 });
 
     runSimulation([item], 5);
@@ -134,7 +134,7 @@ describe('Gilded Rose Item', () => {
     expect(item.quality).toBe(25);
   });
 
-  it('Conjured degrades in quality twice as fast as normal items, sellIn below 0', () => {
+  it('Conjured items degrades in quality twice as fast as normal items, sellIn below 0', () => {
     const item = buildConjuredItem({ quality: 35, sellIn: 2 });
 
     runSimulation([item], 2);

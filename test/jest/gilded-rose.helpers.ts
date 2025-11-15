@@ -13,7 +13,7 @@ export const buildBackStagePassItem = (item?: Partial<Item>) =>
   buildItem({ ...item, name: SpecialCaseItemNames.BACKSTAGE_PASSES });
 
 export const buildConjuredItem = (item?: Partial<Item>) =>
-  buildItem({ ...item, name: SpecialCaseItemNames.CONJURED });
+  buildItem({ ...item, name: `${SpecialCaseItemNames.CONJURED} foo` });
 
 export const runSimulation = (
   items: Item[],
