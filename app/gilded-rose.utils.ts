@@ -26,55 +26,54 @@ const itemIsConjured = (item: Item): boolean => {
 
 const increaseItemQuality = (item: Item, amount: number = 1): Item => {
   const increaseAmount = itemIsExpired(item) ? amount * 2 : amount;
-  item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount);
 
-  return item;
+  return {
+    ...item,
+    quality: Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount),
+  };
 };
 
 const decreaseItemQuality = (item: Item, amount: number = 1): Item => {
   const decreaseAmount = itemIsExpired(item) ? amount * 2 : amount;
-  item.quality = Math.max(0, item.quality - decreaseAmount);
 
-  return item;
+  return { ...item, quality: Math.max(0, item.quality - decreaseAmount) };
 };
 
 const decreaseItemSellIn = (item: Item, decrease: number = 1): Item => {
-  item.sellIn -= decrease;
-
-  return item;
+  return { ...item, sellIn: item.sellIn - decrease };
 };
 
 const updateBackstagePass = (item: Item): Item => {
   if (itemIsExpired(item)) {
-    item.quality = 0;
-
-    return item;
+    return { ...item, quality: 0 };
   }
   const increaseAmount = item.sellIn > 10 ? 1 : item.sellIn > 5 ? 2 : 3;
-  item.quality = Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount);
 
-  return item;
+  return {
+    ...item,
+    quality: Math.min(MAX_QUALITY_LEVEL, item.quality + increaseAmount),
+  };
 };
 
-const defaultUpdateFunction = (item: Item): Item => {
+const defaultUpdateQuality = (item: Item): Item => {
   const decreaseAmount = itemIsConjured(item) ? 2 : 1;
-  decreaseItemQuality(item, decreaseAmount);
 
-  return item;
+  return decreaseItemQuality(item, decreaseAmount);
 };
 
 export const updateItem = (item: Item): Item => {
-  const updateFunction = itemQualityUpdates[item.name];
+  let updatedItem: Item = { ...item };
+  const updateQuality = itemQualityUpdates[item.name];
 
-  if (updateFunction) {
-    updateFunction(item);
+  if (updateQuality) {
+    updatedItem = updateQuality(updatedItem);
   } else {
-    defaultUpdateFunction(item);
+    updatedItem = defaultUpdateQuality(updatedItem);
   }
 
-  if (!skipItemSellInUpdate.has(item.name)) {
-    decreaseItemSellIn(item);
+  if (!skipItemSellInUpdate.has(updatedItem.name)) {
+    updatedItem = decreaseItemSellIn(updatedItem);
   }
 
-  return item;
+  return updatedItem;
 };

@@ -1,4 +1,4 @@
-import { updateItem } from './gilded-rose.rules';
+import { updateItem } from './gilded-rose.utils';
 
 export class Item {
   name: string;
@@ -20,6 +20,11 @@ export class GildedRose {
   }
 
   updateQuality() {
-    return this.items.map((item) => updateItem(item));
+    return this.items.map((item) => {
+      const updatedItem = updateItem(item);
+      Object.assign(item, updatedItem);
+
+      return item;
+    });
   }
 }

@@ -59,7 +59,7 @@ npx ts-node test/golden-master-text-test.ts
 or when compiled:
 
 ```sh
-node test/golden-master-text-test.js
+node dist/test/golden-master-text-test.js
 ```
 
 The amount of days can be provided as an argument:
@@ -71,7 +71,7 @@ npx ts-node test/golden-master-text-test.ts 10
 or when compiled:
 
 ```sh
-node test/golden-master-text-test.js 10
+node dist/test/golden-master-text-test.js 10
 ```
 
 ## Optional: Run the TextTest approval test
